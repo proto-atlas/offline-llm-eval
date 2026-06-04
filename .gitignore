@@ -1,0 +1,26 @@
+# 環境変数と認証情報
+.env
+.env.*
+credentials/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+# テスト一時出力
+tmpoffline-llm-eval-pytest*/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+*.db
+*.sqlite
+*.sqlite3
+
+# Node系ツール
+node_modules/

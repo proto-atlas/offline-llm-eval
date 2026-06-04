@@ -1,0 +1,81 @@
+[build-system]
+requires = ["setuptools>=77.0.3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "offline-llm-eval"
+version = "0.1.0"
+description = "RAG/LLM機能の継続評価に使うオフライン評価ワークベンチです。"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = [
+  "aiosqlite",
+  "alembic",
+  "asyncpg",
+  "fastapi",
+  "pydantic>=2.0",
+  "pyyaml",
+  "sqlalchemy[asyncio]>=2.0",
+  "uvicorn",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx",
+  "mypy",
+  "pytest",
+  "pytest-asyncio",
+  "ruff",
+  "types-PyYAML",
+]
+
+[project.scripts]
+offline-llm-eval-check = "offline_llm_eval.cli.check:main"
+
+[project.urls]
+Homepage = "https://github.com/proto-atlas/offline-llm-eval"
+Repository = "https://github.com/proto-atlas/offline-llm-eval"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+offline_llm_eval = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["alembic", "src", "tests"]
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+docstring-code-format = false
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+show_error_codes = true
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+asyncio_default_test_loop_scope = "function"
