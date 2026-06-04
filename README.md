@@ -51,7 +51,7 @@ python -m pytest
 ## ドキュメント
 
 - [公開仕様](./docs/spec.md)
-- [検証記録](./docs/evidence/verification-2026-06-02.md)
+- [検証記録](./docs/evidence/verification-2026-06-04.md)
 
 ## 評価で確認できる例
 
@@ -70,7 +70,7 @@ python -m pytest
 - 外部 LLM サービスの費用を制御できるか
 - 長時間運用に耐えるか
 
-出力例は [docs/evidence/verification-2026-06-02.md](docs/evidence/verification-2026-06-02.md) にあります。
+出力例は [docs/evidence/verification-2026-06-04.md](docs/evidence/verification-2026-06-04.md) にあります。
 
 ## 技術スタック
 
