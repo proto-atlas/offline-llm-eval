@@ -1,0 +1,42 @@
+name: mock_error_envelopes
+dataset_version: "1.0.0"
+metadata:
+  scope: local_fixture
+  description: Mock error envelope and response-mode mismatch cases.
+cases:
+  - case_key: provider_error_envelope
+    question: "What happens when the provider returns an operational error?"
+    expected_answer: ""
+    expected_response_mode: json
+    tags:
+      - mock_error
+      - provider_error
+    severity: medium
+    metadata:
+      expected_error_type: provider_error
+    assertions:
+      - id: skipped_on_provider_error
+        type: no_answer_expected
+        expected: true
+        required: true
+        on_fail: fail
+    mock_response:
+      error:
+        code: provider_error
+        message: "providerがこのfixture用の制御されたエラーを返しました。"
+
+  - case_key: response_mode_mismatch_fixture
+    question: "Return an SSE-only response in a JSON-only run."
+    expected_answer: ""
+    expected_response_mode: json
+    tags:
+      - mock_error
+      - response_mode
+    severity: low
+    metadata:
+      expected_error_type: response_mode_mismatch
+    assertions: []
+    mock_response:
+      error:
+        code: response_mode_mismatch
+        message: "このfixtureはresponse modeの不一致を表します。"

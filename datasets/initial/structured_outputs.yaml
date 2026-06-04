@@ -1,0 +1,84 @@
+name: structured_outputs
+dataset_version: "1.0.0"
+metadata:
+  scope: local_fixture
+  description: JSON response shape and latency-oriented cases.
+cases:
+  - case_key: json_summary_shape
+    question: "Return the summary result as JSON."
+    expected_answer: '{"verdict":"pass","checked_cases":2}'
+    expected_response_mode: json
+    tags:
+      - json_schema
+      - summary
+    severity: medium
+    metadata:
+      response_shape: summary
+    assertions:
+      - id: valid_summary_json
+        type: json_schema
+        expected:
+          type: object
+          required:
+            - verdict
+            - checked_cases
+          properties:
+            verdict:
+              type: string
+            checked_cases:
+              type: integer
+        required: true
+        on_fail: fail
+      - id: latency_under_threshold
+        type: latency_threshold
+        expected: 1500
+        required: false
+        on_fail: warn
+    mock_response:
+      answer: '{"verdict":"pass","checked_cases":2}'
+      citations:
+        - source: docs/json-summary
+          snippet: "Summary JSON includes verdict and checked_cases."
+      metadata:
+        fixture: true
+        latency_ms: 120
+
+  - case_key: json_error_free
+    question: "Return a JSON result without raw stack trace text."
+    expected_answer: '{"status":"ok","detail":"completed"}'
+    expected_response_mode: json
+    tags:
+      - json_schema
+      - forbidden_phrase
+    severity: high
+    metadata:
+      response_shape: status
+    assertions:
+      - id: valid_status_json
+        type: json_schema
+        expected:
+          type: object
+          required:
+            - status
+            - detail
+          properties:
+            status:
+              type: string
+            detail:
+              type: string
+        required: true
+        on_fail: fail
+      - id: no_stack_trace
+        type: forbidden_phrase
+        expected:
+          - "Traceback"
+          - "Exception:"
+        required: true
+        on_fail: fail
+    mock_response:
+      answer: '{"status":"ok","detail":"completed"}'
+      citations:
+        - source: docs/status-result
+          snippet: "Status result contains status and detail fields."
+      metadata:
+        fixture: true

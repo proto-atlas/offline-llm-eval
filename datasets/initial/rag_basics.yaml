@@ -1,0 +1,66 @@
+name: rag_basics
+dataset_version: "1.0.0"
+metadata:
+  scope: local_fixture
+  description: Basic retrieval-answer cases for offline JSON-mode evaluation.
+cases:
+  - case_key: answer_with_single_source
+    question: "What does the run summary include?"
+    expected_answer: "The run summary includes run metadata, counts, rates, and error type totals."
+    expected_response_mode: json
+    tags:
+      - rag
+      - summary
+    severity: medium
+    metadata:
+      source_set: api_docs
+    assertions:
+      - id: answer_exact
+        type: exact_match
+        expected: "The run summary includes run metadata, counts, rates, and error type totals."
+        required: true
+        on_fail: fail
+      - id: citation_present
+        type: citation_presence
+        expected: true
+        required: true
+        on_fail: fail
+    mock_response:
+      answer: "The run summary includes run metadata, counts, rates, and error type totals."
+      citations:
+        - source: docs/run-summary
+          snippet: "Run summary returns metadata, counts, rates, and error type totals."
+      metadata:
+        fixture: true
+
+  - case_key: answer_with_multiple_keywords
+    question: "Which fields identify a dataset version?"
+    expected_answer: "A dataset version is identified by name and dataset_version."
+    expected_response_mode: json
+    tags:
+      - dataset
+      - identity
+    severity: high
+    metadata:
+      source_set: data_model
+    assertions:
+      - id: contains_required_terms
+        type: keyword_all
+        expected:
+          - name
+          - dataset_version
+        required: true
+        on_fail: fail
+      - id: source_subset
+        type: source_id_subset
+        expected:
+          - docs/dataset-identity
+        required: true
+        on_fail: fail
+    mock_response:
+      answer: "A dataset version is identified by name and dataset_version."
+      citations:
+        - source: docs/dataset-identity
+          snippet: "Dataset uniqueness is based on the pair of name and dataset_version."
+      metadata:
+        fixture: true

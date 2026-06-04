@@ -1,0 +1,70 @@
+name: citation_fidelity
+dataset_version: "1.0.0"
+metadata:
+  scope: local_fixture
+  description: Citation source-id checks for retrieval answers.
+cases:
+  - case_key: exact_source_set
+    question: "Which documents define the API health endpoints?"
+    expected_answer: "The health endpoints are defined by the API endpoint table and NFR-005 notes."
+    expected_response_mode: json
+    tags:
+      - citation
+      - api
+    severity: medium
+    metadata:
+      source_set: api_endpoints
+    assertions:
+      - id: exact_sources
+        type: source_id_exact_set
+        expected:
+          - docs/api-endpoints
+          - docs/nfr-005
+        required: true
+        on_fail: fail
+      - id: answer_mentions_health
+        type: normalized_contains
+        expected: "health endpoints"
+        required: true
+        on_fail: fail
+    mock_response:
+      answer: "The health endpoints are defined by the API endpoint table and NFR-005 notes."
+      citations:
+        - source: docs/api-endpoints
+          snippet: "GET /health is liveness and GET /api/health is readiness."
+        - source: docs/nfr-005
+          snippet: "NFR-005 covers the health endpoint."
+      metadata:
+        fixture: true
+
+  - case_key: subset_source_set
+    question: "What storage backend is implemented first?"
+    expected_answer: "LocalStorageBackend is implemented first; S3 is a later compatible backend."
+    expected_response_mode: json
+    tags:
+      - citation
+      - storage
+    severity: low
+    metadata:
+      source_set: storage
+    assertions:
+      - id: contains_backend
+        type: keyword_all
+        expected:
+          - LocalStorageBackend
+          - S3
+        required: true
+        on_fail: fail
+      - id: source_subset
+        type: source_id_subset
+        expected:
+          - docs/storage-backend
+        required: true
+        on_fail: fail
+    mock_response:
+      answer: "LocalStorageBackend is implemented first; S3 is a later compatible backend."
+      citations:
+        - source: docs/storage-backend
+          snippet: "v0.1.0 uses LocalStorageBackend while keeping the interface compatible with S3."
+      metadata:
+        fixture: true
